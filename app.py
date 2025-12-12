@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from datetime import datetime
+import datetime
 
 
 # ------------------------
@@ -72,7 +72,7 @@ def load_data():
 # 1. Page config
 # ------------------------
 st.set_page_config(
-    page_title="Sample Dashboard",
+    page_title="GRO Governance",
     page_icon="📊",
     layout="wide",
 )
@@ -119,45 +119,59 @@ if start_name is not None:
 # ------------------------
 # 5. Summary metrics (last month)
 # ------------------------
-current_month_num = datetime.now().month
-last_month_num = 12 if current_month_num == 1 else current_month_num - 1
 
-mask_last_month_num = overall_plot["Month_#"] == last_month_num
+current_month_num = datetime.datetime.now().month
+last_month_num = 12 if current_month_num == 1 else current_month_num -1
+last_month_name = overall_plot.loc[overall_plot['Month_#'] == last_month_num, 'Month'].iloc[0]
 
-if mask_last_month_num.any():
-    last_month_name = overall_plot.loc[mask_last_month_num, "Month"].iloc[0]
+def get_metric_value(metric_name: str):
+    return overall_plot.loc[(overall_plot['Month_#'] == last_month_num) & (overall_plot['Metric'] == metric_name), 'Value'].iloc[0]
 
-    def get_metric_value(metric_name: str):
-        mask_metric = (
-            (overall_plot["Month"] == last_month_name)
-            & (overall_plot["Metric"] == metric_name)
-        )
-        if mask_metric.any():
-            return overall_plot.loc[mask_metric, "Value"].iloc[0]
-        return None
+col1, col2, col3 = st.columns(3)
 
-    latest_UT = get_metric_value("Utilization")
-    latest_billability = get_metric_value("Billability")
-    latest_engagement = get_metric_value("Engagement")
+with col1: st.metric(f"{last_month_name} Utilization", f"{get_metric_value("Utilization"):.1%}")
+with col2: st.metric(f"{last_month_name} Billability", f"{get_metric_value("Billability"):.1%}")
+with col3: st.metric(f"{last_month_name} Engagement", f"{get_metric_value("Engagement"):.1%}")
 
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        if latest_UT is not None:
-            st.metric(f"{last_month_name} Utilization", f"{latest_UT:.1%}")
-
-    with col2:
-        if latest_billability is not None:
-            st.metric(f"{last_month_name} Billability", f"{latest_billability:.1%}")
-
-    with col3:
-        if latest_engagement is not None:
-            st.metric(f"{last_month_name} Engagement", f"{latest_engagement:.1%}")
-else:
-    st.warning("No data found for last month in overall_plot.")
 
 # ------------------------
-# 6. Plotly chart
+# 6. Plotly line chart for UT, Engagement and Billability
+# ------------------------
+
+metrics = ['Billability', 'Utilization', 'Engagement']
+months_filter = pa_plot_filtered['Month'].unique()
+st.subheader("Metrics Evolution")
+
+if pa_plot_filtered.empty:
+    st.warning(
+        "No data for the selected filters. "
+        "Try adjusting the Practice Areas or months."
+    )
+else:
+    fig = px.line(
+        overall_plot.loc[(overall_plot['Metric'].isin(metrics)) & (overall_plot['Month'].isin(months_filter))],
+        x="Month",
+        y="Value",
+        color="Metric",
+        title="Metrics over time",
+        markers=True,
+        text='Value'
+    )
+
+    fig.update_traces(
+    texttemplate="%{y:.1%}",
+    textposition="top center"
+    )
+
+    fig.update_yaxes(
+    tickformat=".0%"
+    )
+     
+
+    st.plotly_chart(fig, use_container_width=True)
+
+# ------------------------
+# 7. Plotly area chart for research hours
 # ------------------------
 st.subheader("Research Hours Over Time")
 
