@@ -135,10 +135,10 @@ with col3: st.metric(f"{last_month_name} Engagement", f"{get_metric_value("Engag
 
 
 # ------------------------
-# 6. Plotly line chart for UT, Engagement and Billability
+# 6. Plotly line chart for UT, Billability and Engagement
 # ------------------------
 
-metrics = ['Billability', 'Utilization', 'Engagement']
+metrics = ['Utilization', 'Billability', 'Engagement']
 months_filter = pa_plot_filtered['Month'].unique()
 st.subheader("Metrics Evolution")
 
@@ -187,7 +187,7 @@ else:
         y="Research hours",
         color="Practice area",
         title="Research hours over time",
-        markers=True,
+        markers=True
     )
 
     st.plotly_chart(fig, use_container_width=True)
