@@ -160,9 +160,9 @@ st.markdown(
 # ------------------------
 # 2. Title & description
 # ------------------------
-st.title("📊 Personal Dashboard")
+st.title("📊 GRO Dashboard")
 st.write(
-    "This is a simple demo for future dashboard + analysis. "
+    "Check GRO performance as a team or by FTE. "
     "Use the controls on the left to filter the data."
 )
 
