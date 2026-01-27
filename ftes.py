@@ -130,6 +130,33 @@ st.set_page_config(
     layout="wide",
 )
 
+
+st.markdown(
+    """
+    <style>
+    /* Main app background */
+    .stApp {
+        background-color: rgba(0,0,0,0);
+    }
+
+    /* Sidebar background */
+    section[data-testid="stSidebar"] {
+        background-color: #43224D;
+    }
+
+      /* Block container */
+    div[data-testid="stAppViewContainer"] {
+        background-color: rgba(0,0,0,0);
+    }
+    div[data-testid="stHeader"] {
+        background: rgba(0,0,0,0);  /* transparent header */
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # ------------------------
 # 2. Title & description
 # ------------------------
@@ -260,6 +287,11 @@ else:
 
     fig.update_yaxes(
         tickformat=".1%")
+
+    #fig.update_layout(
+    #paper_bgcolor="#776EA9",  # outside plot (transparent)
+    #plot_bgcolor="rgba(0,0,0,0)",   # inside axes (transparent)
+    #)
 
     st.plotly_chart(fig, use_container_width=True)
 
