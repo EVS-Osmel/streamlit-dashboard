@@ -4,6 +4,18 @@ import plotly.express as px
 import datetime
 
 fte = "VND Reinoza  Osmel"
+current_FTEs = ["Gonzalez Yamileth",
+                 "VND Guzman Agustin",
+                 "VND Reinoza  Osmel",
+                 "VND Nunez Angela",
+                 "VND Pizarro Nicol",
+                 "VND Fuentealba Erick",
+                 "VND Abrams Shannon",
+                 "VND Olavarria Isabella",
+                 "VND Rivadeneira Gabriela",
+                 "VND Marchetti Vinicius",
+                 "GRO"]
+
 
 # ------------------------
 # Month filter helper
@@ -121,7 +133,7 @@ st.set_page_config(
 # ------------------------
 # 2. Title & description
 # ------------------------
-st.title(f"📊 {fte} Dashboard")
+st.title("📊 Personal Dashboard")
 st.write(
     "This is a simple demo for future dashboard + analysis. "
     "Use the controls on the left to filter the data."
@@ -139,8 +151,8 @@ st.sidebar.header("FTE Filters")
 
 fte_filter = st.sidebar.multiselect(
     "Select data to show:",
-    options=[fte, "GRO"],
-    default=[fte, "GRO"]
+    options = current_FTEs,
+    default=[fte,"GRO"]
 )
 
 st.sidebar.header("Metrics Filters")
@@ -245,6 +257,9 @@ else:
         tickformat="%Y-%b",
         title_text="Year-Month"
     )
+
+    fig.update_yaxes(
+        tickformat=".1%")
 
     st.plotly_chart(fig, use_container_width=True)
 
