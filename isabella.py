@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
-fte = "VND Reinoza  Osmel"
+fte = "VND Olavarria Isabella"
 current_FTEs = ["Gonzalez Yamileth",
                  "VND Guzman Agustin",
                  "VND Reinoza  Osmel",
@@ -192,7 +192,7 @@ st.sidebar.header("FTE Filters")
 
 fte_filter = st.sidebar.multiselect(
     "Select data to show:",
-    options = current_FTEs,
+    options = [fte,"GRO"],
     default=[fte,"GRO"]
 )
 
